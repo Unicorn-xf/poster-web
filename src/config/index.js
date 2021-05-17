@@ -17,8 +17,8 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://192.168.3.5:9090/api/',
-    pro: 'https://produce.com'
+    dev: 'https://5b19aa0b-a5ec-4c99-87cc-bf7ebffe1e07.bspapp.com',
+    pro: 'https://5b19aa0b-a5ec-4c99-87cc-bf7ebffe1e07.bspapp.com'
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home

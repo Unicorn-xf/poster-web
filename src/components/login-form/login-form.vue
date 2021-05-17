@@ -1,14 +1,14 @@
 <template>
   <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
-    <FormItem prop="userName">
-      <Input v-model="form.userName" placeholder="请输入用户名">
+    <FormItem prop="phoneNum">
+      <Input v-model="form.phoneNum" placeholder="请输入用户手机号码">
       <span slot="prepend">
-        <Icon :size="16" type="ios-person"></Icon>
+        <Icon :size="11" type="ios-person"></Icon>
       </span>
       </Input>
     </FormItem>
-    <FormItem prop="password">
-      <Input type="password" v-model="form.password" placeholder="请输入密码">
+    <FormItem prop="passwd">
+      <Input type="password" v-model="form.passwd" placeholder="请输入密码">
       <span slot="prepend">
         <Icon :size="14" type="md-lock"></Icon>
       </span>
@@ -50,16 +50,16 @@
       }
       return {
         form: {
-          userName: '',
-          password: '',
+          phoneNum: '',
+          passwd: '',
           identifyText: '',
           identifyCode: '',
         },
         //identifyCodes: '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
         identifyCodes:'1',
         rules: {
-          userName: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
-          password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
+          phoneNum: [{ required: true, message: '用户电话号码不能为空', trigger: 'blur' }],
+          passwd: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
           identifyText: [{validator: identifyRules, trigger: 'blur'}]
         }
       }
@@ -74,8 +74,8 @@
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
             this.$emit('on-success-valid', {
-              userName: this.form.userName,
-              password: this.form.password,
+              phoneNum: this.form.phoneNum,
+              passwd: this.form.passwd,
               imageCode: this.form.identifyText,
             })
           }

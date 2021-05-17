@@ -37,16 +37,17 @@
         'getUserInfo'
       ]),
       handleSubmit({
-        userName,
-        password
+        phoneNum,
+        passwd
       }) {
-        userName = userName.trim()
-        password = md5(password);
+        phoneNum = phoneNum.trim()
+        //password = md5(password);
         login({
-          userName,
-          password
+          phoneNum,
+          passwd
         }).then(res => {
-          // console.log("res: " + JSON.stringify(res));
+          alert(JSON.stringify(res))
+          console.log("res1: " + JSON.stringify(res));
           if (res.data.code == 2003) {
             this.handleLogin({
               res
