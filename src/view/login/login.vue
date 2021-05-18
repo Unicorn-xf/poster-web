@@ -46,9 +46,7 @@
           phoneNum,
           passwd
         }).then(res => {
-          alert(JSON.stringify(res))
-          console.log("res1: " + JSON.stringify(res));
-          if (res.data.code == 2003) {
+          if (res.data.retcode == '0000') {
             this.handleLogin({
               res
             }).then(res => {

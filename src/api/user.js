@@ -1,5 +1,6 @@
 import axios from '@/libs/api.request'
 
+//登录
 export const login = ({
   phoneNum,
   passwd
@@ -10,7 +11,7 @@ export const login = ({
   }
   reqData.method = 'login'
   return axios.request({
-    url: '/http/user',
+    url: '/http/userInfo',
     data: reqData,
     method: 'post'
   })

@@ -225,52 +225,6 @@ export default {
           })
         }
       })
-    },
-    // 把一个未读消息标记为已读
-    hasRead ({ state, commit }, { msg_id }) {
-      return new Promise((resolve, reject) => {
-        hasRead(msg_id).then(() => {
-          commit('moveMsg', {
-            from: 'messageUnreadList',
-            to: 'messageReadedList',
-            msg_id
-          })
-          commit('setMessageCount', state.unreadCount - 1)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    // 删除一个已读消息到回收站
-    removeReaded ({ commit }, { msg_id }) {
-      return new Promise((resolve, reject) => {
-        removeReaded(msg_id).then(() => {
-          commit('moveMsg', {
-            from: 'messageReadedList',
-            to: 'messageTrashList',
-            msg_id
-          })
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    // 还原一个已删除消息到已读消息
-    restoreTrash ({ commit }, { msg_id }) {
-      return new Promise((resolve, reject) => {
-        restoreTrash(msg_id).then(() => {
-          commit('moveMsg', {
-            from: 'messageTrashList',
-            to: 'messageReadedList',
-            msg_id
-          })
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
     }
   }
 }
