@@ -51,20 +51,18 @@
               res
             }).then(res => {
               this.getUserInfo().then(res => {
-                // console.log("res1: " + JSON.stringify(res));
-                if (res.code == 1000) {
+                //console.log("res1: " + JSON.stringify(res));
+                if (res.retcode == '0000') {
                   setCookiesValue("isLoginPage","false")
                   this.$router.push({
                     name: this.$config.homeName
                   })
                 } else {
-                  this.$Message.error(res.message);
                   this.$refs.LoginForm.refreshCode();
                 }
               })
             })
           } else {
-            this.$Message.error(res.data.message);
             this.$refs.LoginForm.refreshCode();
           }
         })

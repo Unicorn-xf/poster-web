@@ -16,6 +16,17 @@ export const getToken = () => {
   else return false
 }
 
+export const setPhone = (phone) => {
+  Cookies.set('phone', phone, { expires: cookieExpires || 1 })
+}
+
+export const getPhone = () => {
+  const phone = Cookies.get('phone')
+  console.info("cooking中的电话："+phone)
+  if (phone) return phone
+  else return false
+}
+
 /**
  * 把值存入到Cookie
  */

@@ -6,6 +6,8 @@ import iView from 'iview'
 import {
   setToken,
   getToken,
+  setPhone,
+  getPhone,
   setTitle,
   localSave,
   localRead,
@@ -51,21 +53,22 @@ const turnTo = (to, next) => {
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
   const token = getToken()
+  const phone = getPhone()
   const menu = localRead('route') // 读取路由数据
   // 处理token失效和强制访问页面处理（强制访问页面不在查询出来的页面列表里）
   // if(){
 
   // }
 
-  if (!token && to.name !== LOGIN_PAGE_NAME) {
+  if (!phone && to.name !== LOGIN_PAGE_NAME) {
     // 未登录且要跳转的页面不是登录页
     next({
       name: LOGIN_PAGE_NAME, // 跳转到登录页
     })
-  } else if (!token && to.name === LOGIN_PAGE_NAME) {
+  } else if (!phone && to.name === LOGIN_PAGE_NAME) {
     // 未登陆且要跳转的页面是登录页
     next() // 跳转
-  } else if (token && to.name === LOGIN_PAGE_NAME) {
+  } else if (phone && to.name === LOGIN_PAGE_NAME) {
     // 已登录且要跳转的页面是登录页
     next({
       name: homeName // 跳转到homeName页
@@ -84,9 +87,10 @@ router.beforeEach((to, from, next) => {
     }else{
       store.dispatch('getUserInfoAndSet').then(user => {
         // 如果本地不存在路由数据则动态获取
+        //console.info("用户数据："+JSON.stringify(user))
         if (menu === "null" || !menu || menu.length === 0) {
           findMenu({
-            userId: user.data.id
+            userId: user.data[0]._id
           }).then(res => {
             var list = []
             var menuData = res.data.result

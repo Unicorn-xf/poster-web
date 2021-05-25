@@ -17,13 +17,13 @@ export const login = ({
   })
 }
 
-export const getUserInfo = (token) => {
+export const getUserInfo = (phone) => {
+  const reqData = {phone}
+  reqData.method = 'getUserByLogin'
   return axios.request({
-    url: '/sysadmin/getUserByLogin',
-    params: {
-      token: token
-    },
-    method: 'get'
+    url: '/http/userInfo',
+    data: reqData,
+    method: 'post'
   })
 }
 

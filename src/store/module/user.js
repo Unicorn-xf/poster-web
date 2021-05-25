@@ -9,12 +9,13 @@ import {
   restoreTrash,
   getUnreadCount
 } from '@/api/user'
-import { setToken, getToken, setCookiesValue, getCookiesValue, localSave } from '@/libs/util'
+import { setToken, getToken, setCookiesValue, getCookiesValue, localSave,setPhone,getPhone } from '@/libs/util'
 
 export default {
   state: {
     userName: '',
     userId: '',
+    phone:getPhone(),
     avatarImgPath: '',
     token: getToken(),
     access: '',
@@ -31,6 +32,10 @@ export default {
     },
     setUserId (state, id) {
       state.userId = id
+    },
+    setPhone (state, phone) {
+      state.phone = phone
+      setPhone(phone)
     },
     setUserName (state, name) {
       state.userName = name
@@ -76,52 +81,38 @@ export default {
     // 登录
     handleLogin ({ commit }, {res}) {
       return new Promise((resolve, reject) => {
-        const data = res.data;
-        commit('setToken', data.jwtToken)
+        const data = res.data.data[0];
+        commit('setPhone', data.phoneNum)
         resolve()
       })
     },
 
-    // 登录
-    // handleLogin ({ commit }, { username, password }) {
-    //   username = username.trim()
-    //   return new Promise((resolve, reject) => {
-    //     login({
-    //       username,
-    //       password
-    //     }).then(res => {
-    //       console.log("res: " + JSON.stringify(res));
-    //       const data = res.data
-    //       commit('setToken', data.token)
-    //       resolve()
-    //     }).catch(err => {
-    //       reject(err)
-    //     })
-    //   })
-    // },
+
     // 退出登录
     handleLogOut ({ state, commit }) {
-      return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('setToken', '')
-          commit('setAccess', [])
-          resolve()
-        }).catch(err => {
-          reject(err)
-        })
+       return new Promise((resolve, reject) => {
+      //   logout(state.token).then(() => {
+      //     commit('setToken', '')
+      //     commit('setAccess', [])
+      //     resolve()
+      //   }).catch(err => {
+      //     reject(err)
+      //   })
         // 如果你的退出登录无需请求接口，则可以直接使用下面三行代码而无需使用logout调用接口
-        // commit('setToken', '')
-        // commit('setAccess', [])
-        // resolve()
+        commit('setPhone', '')
+        commit('setToken', '')
+        commit('setAccess', [])
+        resolve()
       })
     },
     // 从Cookie获取用户相关信息
     getUserInfoByCookie ({state, commit }) {
-      commit('setAvatar', getCookiesValue("avatar"))
+      //commit('setAvatar', getCookiesValue("avatar"))
       commit('setUserName', getCookiesValue("userName"))
       commit('setUserId', getCookiesValue("userId"))
-      commit('setAccess', getCookiesValue("access"))
-      commit('setHasGetInfo', true)
+      commit('setPhone', getCookiesValue("phone"))
+      //commit('setAccess', getCookiesValue("access"))
+      //commit('setHasGetInfo', true)
     },
     setUserInfoNull () {
       localSave('route', "null")
@@ -129,28 +120,31 @@ export default {
       setCookiesValue("avatar", "")
       setCookiesValue("userId", "")
       setCookiesValue("userName", "")
-      setCookiesValue("access", "")
       setCookiesValue("hasGetInfo", "")
+      setCookiesValue("access", "")
+      setCookiesValue("phone", "")
       setToken("")
     },
     // 获取用户相关信息并存入cookie
     getUserInfoAndSet ({state, commit }) {
       return new Promise((resolve, reject) => {
         try {
-          // console.log('state.token:'+state.token);
-          getUserInfo(state.token).then(res => {
+          //console.log('state.phone111:'+state.phone);
+          getUserInfo(state.phone).then(res => {
             const data = res.data
-            if(data.code === 1000){
-              commit('setAvatar', data.data.avatar)
-              commit('setUserName', data.data.userName)
-              commit('setUserId', data.data.id)
-              commit('setAccess', data.data.access)
-              commit('setHasGetInfo', true)
-              setCookiesValue("avatar", data.data.avatar)
-              setCookiesValue("userId", data.data.id)
-              setCookiesValue("userName", data.data.userName)
-              setCookiesValue("access", data.data.access)
-              setCookiesValue("hasGetInfo", true)
+            if(res.data.retcode === '0000'){
+              //commit('setAvatar', data.data.avatar)
+              commit('setUserName', data.data[0].userName)
+              commit('setUserId', data.data[0]._id)
+              commit('setPhone', data.data[0].phoneNum)
+             // commit('setAccess', data.data.access)
+              //commit('setHasGetInfo', true)
+              //setCookiesValue("avatar", data.data.avatar)
+              setCookiesValue("userId", data.data[0]._id)
+              setCookiesValue("userName", data.data[0].userName)
+               setCookiesValue("phone", data.data[0].phoneNum)
+              //setCookiesValue("access", data.data.access)
+              //setCookiesValue("hasGetInfo", true)
             }
             resolve(data)
           }).catch(err => {
@@ -165,15 +159,17 @@ export default {
     getUserInfo ({state, commit }) {
       return new Promise((resolve, reject) => {
         try {
-          // console.log('state.token:'+state.token);
-          getUserInfo(state.token).then(res => {
+          //console.log('state.phone222:'+state.phone);
+          getUserInfo(state.phone).then(res => {
             const data = res.data
-            if(data.code === 1000){
-              commit('setAvatar', data.data.avatar)
-              commit('setUserName', data.data.userName)
-              commit('setUserId', data.data.id)
-              commit('setAccess', data.data.access)
-              commit('setHasGetInfo', true)
+            //console.info("用户登录："+JSON.stringify(res))
+            if(res.data.retcode === '0000'){
+              //commit('setAvatar', data.data.avatar)
+              commit('setUserName', data.data[0].userName)
+              commit('setUserId', data.data[0]._id)
+              commit('setPhone', data.data[0].phoneNum)
+              //commit('setAccess', data.data.access)
+              //commit('setHasGetInfo', true)
             }
             resolve(data)
           }).catch(err => {
