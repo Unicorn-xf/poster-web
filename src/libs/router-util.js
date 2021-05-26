@@ -1,8 +1,7 @@
 import parentView from '@/components/parent-view'
 import {
 	hasChild,
-	localRead,
-	getToken
+	localRead
 } from '@/libs/util'
 import store from '@/store'
 import Main from '@/components/main'
@@ -14,10 +13,13 @@ import {
 export const loadMenu = () => {
 	let list = []
 	let data = localRead('route')
+  //console.info("加载菜单："+JSON.stringify(data))
 	if (data === 'null' || !data) {
 		return list
 	}
+  //console.info("加载菜单1："+JSON.parse(data))
 	list = makeMenu(JSON.parse(data))
+  //console.info("加载菜单2："+JSON.stringify(list))
 	return list
 }
 
@@ -51,6 +53,7 @@ export const loadMenu = () => {
  */
 export const makeMenu = (menuList) => {
   let menuTreeList = []
+  console.info("数据："+JSON.stringify(menuList))
   for (var i = 0; i < menuList.length; i++) {
     if(menuList[i].menuPid == '0'){// 处理main
       let menuItem = {

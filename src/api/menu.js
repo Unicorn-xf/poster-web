@@ -2,8 +2,9 @@ import axios from '@/libs/api.request'
 
 // 获取动态菜单
 export const findMenu = data => {
+  data.method = 'findMenu'
   return axios.request({
-    url: 'sysMenuFun/findMenu',
+    url: 'http/menuInfo',
     method: 'post',
     data: data
   })

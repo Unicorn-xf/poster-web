@@ -93,7 +93,7 @@ router.beforeEach((to, from, next) => {
             userId: user.data[0]._id
           }).then(res => {
             var list = []
-            var menuData = res.data.result
+            var menuData = res.data.data
             // console.log('返回的路由原始数据:'+ JSON.stringify(menuData))
 
             // 格式化菜单
@@ -101,7 +101,6 @@ router.beforeEach((to, from, next) => {
             localSave('route', JSON.stringify(menuData))
             list = makeMenu(menuData)
             // console.log('格式化路由数据:')
-            // console.log(list)
             // 将404路由动态注入，防止第一次没有路由数据跳转到404,
             list.push({
               path: '/404',

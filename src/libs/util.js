@@ -22,7 +22,6 @@ export const setPhone = (phone) => {
 
 export const getPhone = () => {
   const phone = Cookies.get('phone')
-  console.info("cooking中的电话："+phone)
   if (phone) return phone
   else return false
 }

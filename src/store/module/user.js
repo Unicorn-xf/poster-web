@@ -107,7 +107,7 @@ export default {
     },
     // 从Cookie获取用户相关信息
     getUserInfoByCookie ({state, commit }) {
-      //commit('setAvatar', getCookiesValue("avatar"))
+      commit('setAvatar', getCookiesValue("avatar"))
       commit('setUserName', getCookiesValue("userName"))
       commit('setUserId', getCookiesValue("userId"))
       commit('setPhone', getCookiesValue("phone"))
@@ -133,16 +133,16 @@ export default {
           getUserInfo(state.phone).then(res => {
             const data = res.data
             if(res.data.retcode === '0000'){
-              //commit('setAvatar', data.data.avatar)
+              commit('setAvatar', data.data[0].avatar)
               commit('setUserName', data.data[0].userName)
               commit('setUserId', data.data[0]._id)
               commit('setPhone', data.data[0].phoneNum)
              // commit('setAccess', data.data.access)
               //commit('setHasGetInfo', true)
-              //setCookiesValue("avatar", data.data.avatar)
+              setCookiesValue("avatar", data.data[0].avatar)
               setCookiesValue("userId", data.data[0]._id)
               setCookiesValue("userName", data.data[0].userName)
-               setCookiesValue("phone", data.data[0].phoneNum)
+              setCookiesValue("phone", data.data[0].phoneNum)
               //setCookiesValue("access", data.data.access)
               //setCookiesValue("hasGetInfo", true)
             }
@@ -162,9 +162,8 @@ export default {
           //console.log('state.phone222:'+state.phone);
           getUserInfo(state.phone).then(res => {
             const data = res.data
-            //console.info("用户登录："+JSON.stringify(res))
             if(res.data.retcode === '0000'){
-              //commit('setAvatar', data.data.avatar)
+              commit('setAvatar', data.data[0].avatar)
               commit('setUserName', data.data[0].userName)
               commit('setUserId', data.data[0]._id)
               commit('setPhone', data.data[0].phoneNum)
