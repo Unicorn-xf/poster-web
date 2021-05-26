@@ -53,7 +53,6 @@ export const loadMenu = () => {
  */
 export const makeMenu = (menuList) => {
   let menuTreeList = []
-  console.info("数据："+JSON.stringify(menuList))
   for (var i = 0; i < menuList.length; i++) {
     if(menuList[i].menuPid == '0'){// 处理main
       let menuItem = {

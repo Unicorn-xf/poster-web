@@ -9,11 +9,11 @@
   <div class="search">
     <Card>
       <Row class="operation">
-        <Button v-hasAuth="'menuManage.vue_add'" @click="addMenu" type="primary" icon="md-add"
+        <Button @click="addMenu" type="primary" icon="md-add"
           >添加子节点</Button
         >
         <!-- <Button @click="addRootMenu" icon="md-add">添加顶部菜单</Button> -->
-        <Button v-hasAuth="'menuManage.vue_delete'" @click="delAll" icon="md-trash">批量删除</Button>
+        <Button @click="delAll" icon="md-trash">批量删除</Button>
         <Dropdown @on-click="handleDropdown">
           <Button>
             更多操作
@@ -288,7 +288,6 @@
             </FormItem>
             <FormItem>
               <Button
-                v-hasAuth="'menuManage.vue_edit'"
                 style="margin-right: 5px"
                 @click="submitEdit"
                 :loading="submitLoading"
@@ -529,7 +528,7 @@
       </Form>
       <div slot="footer">
         <Button type="text" @click="menuModalVisible = false">取消</Button>
-        <Button v-hasAuth="'menuManage.vue_add'" type="primary" :loading="submitLoading" @click="submitAdd"
+        <Button type="primary" :loading="submitLoading" @click="submitAdd"
           >提交</Button
         >
       </div>
@@ -878,6 +877,7 @@ export default {
     initTree (data,level) {
       let t = this
       level++
+      //console.info("层级："+JSON.stringify(data))
       for(let i in data) {
         let item = data[i]
         if(this.expandLevel === 4){
@@ -896,7 +896,7 @@ export default {
           item.path = item.menuPath
           item.name = item.routeName// 路由英文名
         }
-        if(item.children.length) {
+        if(item.children != undefined && item.children.length >0) {
           t.initTree(item.children,level)
         }
       }
@@ -905,17 +905,18 @@ export default {
       this.loading = true;
       getAllPermissionList({userId:this.userInfo.userId}).then(res => {
         this.loading = false;
+        //console.info("菜单："+JSON.stringify(res))
         res = res.data;
-        if (res.success) {
+        if (res.retcode === '0000') {
           // 递归
           // res.result = res.result[0].children;
-          res.result[0].menuName = "后台管理系统";
-          res.result[0].type = -1;
-          res.result[0].sortOrder = 0.00;
-          this.initTree(res.result,-1);
+          res.data[0].menuName = "后台管理系统";
+          res.data[0].type = -1;
+          res.data[0].sortOrder = 0.00;
+          this.initTree(res.data,-1);
           // 仅展开指定级数 默认后端已展开所有
           let expandLevel = this.expandLevel;
-          res.result.forEach(function (e) {
+          res.data.forEach(function (e) {
             if (expandLevel == 1) {
               if (e.level == 0) {
                 e.expand = false;
@@ -972,7 +973,7 @@ export default {
               }
             }
           });
-          this.data = res.result;
+          this.data = res.data;
         }else{
           this.$Message.error("查询菜单树出错");
         }
@@ -983,9 +984,9 @@ export default {
       getAllPermissionList({userId:this.userInfo.userId}).then(res => {
         this.loadingEdit = false;
         res = res.data;
-        if (res.success) {
-          res.result[0].menuName = "后台管理系统";
-          let needTrans = res.result
+        if (res.retcode === '0000') {
+          res.data[0].menuName = "后台管理系统";
+          let needTrans = res.data
           let transed = this.transTree(needTrans)
           // 头部加入一级
           // let first = {
@@ -1004,8 +1005,8 @@ export default {
         this.loading = true;
         searchMenu({ menuName: this.searchKey }).then((res) => {
           this.loading = false;
-          if (res.data.success) {
-            res.data.result.forEach(function (item) {
+          if (res.data.retcode === '0000') {
+            res.data.data.forEach(function (item) {
               item.title = item.menuName
               item.sortOrder = item.menuSort
               item.parentId = item.menuPid
@@ -1024,7 +1025,7 @@ export default {
                 item.level = 1
               }
             })
-            this.data = res.data.result;
+            this.data = res.data.data;
           }
         });
       } else {
@@ -1047,7 +1048,7 @@ export default {
           if(menu.parentMenuName == ""){
              menu.parentMenu = "后台管理系统"
           }else{
-            menu.parentMenu = menu.parentMenuName;
+            menu.parentMenu = menu.parentMenuName[0];
           }
         }
         this.form = menu;
@@ -1114,7 +1115,7 @@ export default {
           }
           editMenu(menuInfo).then((res) => {
             this.submitLoading = false;
-            if (res.data.success) {
+            if (res.data.retcode == '0000') {
               this.$Message.success("编辑成功");
               // 标记重新获取菜单数据
               this.$store.commit("setAdded", false);
@@ -1156,7 +1157,7 @@ export default {
           }
           addMenu(menuInfo).then((res) => {
             this.submitLoading = false;
-            if (res.data.success) {
+            if (res.data.retcode == '0000') {
               this.$Message.success("添加成功");
               // 标记重新获取菜单数据
               this.$store.commit("setAdded", false);
@@ -1252,7 +1253,7 @@ export default {
           ids = ids.substring(0, ids.length - 1);
           delMenuByIds({ ids: ids }).then((res) => {
             this.$Modal.remove();
-            if (res.data.success) {
+            if (res.data.retcode == '0000') {
               this.$Message.success("删除成功");
               // 标记重新获取菜单数据
               this.$store.commit("setAdded", false);
