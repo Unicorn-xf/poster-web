@@ -12,7 +12,7 @@
         <Button @click="addMenu" type="primary" icon="md-add"
           >添加子节点</Button
         >
-        <!-- <Button @click="addRootMenu" icon="md-add">添加顶部菜单</Button> -->
+        <Button @click="addRootMenu" icon="md-add">添加顶部菜单</Button>
         <Button @click="delAll" icon="md-trash">批量删除</Button>
         <Dropdown @on-click="handleDropdown">
           <Button>
@@ -905,7 +905,6 @@ export default {
       this.loading = true;
       getAllPermissionList({userId:this.userInfo.userId}).then(res => {
         this.loading = false;
-        //console.info("菜单："+JSON.stringify(res))
         res = res.data;
         if (res.retcode === '0000') {
           // 递归
@@ -1051,6 +1050,7 @@ export default {
             menu.parentMenu = menu.parentMenuName[0];
           }
         }
+        console.info("表单："+JSON.stringify(menu))
         this.form = menu;
         this.editTitle = menu.title;
       } else {
@@ -1138,7 +1138,7 @@ export default {
             this.formAdd.component = ""; */
             menuInfo.menuName = this.formAdd.title// 名称
             menuInfo.menuSort = this.formAdd.sortOrder// 排序值
-            menuInfo.menuPid = this.formAdd.parentId// 上级id
+            menuInfo.menuPid = this.formAdd.parentId + ""// 上级id
             menuInfo.menuType = "1"// 类型
             menuInfo.menuState = this.formAdd.status// 是否启用
             menuInfo.funcName = this.formAdd.path//请求路径
@@ -1152,7 +1152,7 @@ export default {
             menuInfo.menuSort = this.formAdd.sortOrder// 排序值
             menuInfo.menuState = this.formAdd.status// 是否启用
             // menuInfo.showAlways = this.formAdd.showAlways// 始终显示
-            menuInfo.menuPid = this.formAdd.parentId// 上级id
+            menuInfo.menuPid = this.formAdd.parentId + ""// 上级id
             menuInfo.menuType = "0"// 类型
           }
           addMenu(menuInfo).then((res) => {

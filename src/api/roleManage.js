@@ -1,18 +1,21 @@
 import axios from '@/libs/api.request'
 
 export const getAllRole = (data) => {
+  data.method = 'getAllRole'
   return axios.request({
-    url: '/sysRole/getAllRole',
+    url: '/http/roleInfo',
     method: 'post',
     data: data
   })
 }
 
 export const getMenuTree = (data) => {
+  let list = {}
+  list.method = 'findMenuTree'
   return axios.request({
-    url: '/sysMenuFun/getAllMenuTree',
+    url: 'http/menuInfo',
     method: 'post',
-    data: data
+    data: list
   })
 }
 

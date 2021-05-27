@@ -10,14 +10,16 @@
   <div class="search">
     <Card>
       <Row class="operation">
-        <Button v-hasAuth="'roleAuthManage.vue_add'" @click="addRoleFun" type="primary" icon="md-add">添加角色</Button>
-        <Button v-hasAuth="'roleAuthManage.vue_delete'" @click="delAll" icon="md-trash">批量删除</Button>
+        <!-- v-hasAuth="'roleAuthManage.vue_add'" -->
+        <Button  @click="addRoleFun" type="primary" icon="md-add">添加角色</Button>
+         <!-- v-hasAuth="'roleAuthManage.vue_delete'" -->
+        <Button  @click="delAll" icon="md-trash">批量删除</Button>
         <Button @click="init" icon="md-refresh">刷新</Button>
         <Button type="dashed" @click="openTip = !openTip">{{
           openTip ? "关闭提示" : "开启提示"
         }}</Button>
+        <!-- v-hasAuth="'roleAuthManage.vue_search'" -->
         <Input
-          v-hasAuth="'roleAuthManage.vue_search'"
           v-model="searchForm.key"
           suffix="ios-search"
           @on-change="getDataList"
@@ -126,8 +128,8 @@
           <Option value="3">仅展开两级</Option>
         </Select>
         <Button @click="selectTreeAll">全选/反选</Button>
+         <!-- v-hasAuth="'roleAuthManage.vue_editPerm'" -->
         <Button
-          v-hasAuth="'roleAuthManage.vue_editPerm'"
           type="primary"
           :loading="submitPermLoading"
           @click="submitPermEdit"
@@ -241,8 +243,9 @@ export default {
           align: "center",
         },
         {
+          title: "序号",
           type: "index",
-          width: 60,
+          width: 70,
           align: "center",
         },
         {
@@ -250,18 +253,21 @@ export default {
           key: "roleName",
           width: 150,
           sortable: true,
+          align: "center",
         },
         {
           title: "备注",
           key: "description",
           minWidth: 150,
           sortable: true,
+          align: "center",
         },
         {
           title: "已绑定用户(人)",
           key: "userCount",
           minWidth: 150,
           sortable: true,
+          align: "center",
         },
         {
           title: "创建时间",
@@ -269,12 +275,14 @@ export default {
           width: 170,
           sortable: true,
           sortType: "desc",
+          align: "center",
         },
         {
-          title: "creator",
-          key: "creator",
+          title: "创建人",
+          key: "userName",
           width: 170,
           sortable: true,
+          align: "center",
         },
         // {
         //   title: "更新时间",
@@ -333,7 +341,7 @@ export default {
                       this.editPerm(params.row);
                     },
                   },
-                  hasAuth: "roleAuthManage.vue_view",
+                  //hasAuth: "roleAuthManage.vue_view",
                 },
                 "菜单权限"
               ),
@@ -366,23 +374,23 @@ export default {
                       this.remove(params.row);
                     },
                   },
-                  hasAuth: "roleAuthManage.vue_delete"
+                  //hasAuth: "roleAuthManage.vue_delete"
                 },
                 "删除"
               ),
             ]
             // 编辑按钮
-            if(!this.$testAuth('roleAuthManage.vue_edit')) {
-              data.splice(2, 2)
-            }
+            //if(!this.$testAuth('roleAuthManage.vue_edit')) {
+             // data.splice(2, 2)
+            //}
             // 菜单按钮
-            if(!this.$testAuth('roleAuthManage.vue_view')) {
-              data.splice(0, 2)
-            }
+            //if(!this.$testAuth('roleAuthManage.vue_view')) {
+              //data.splice(0, 2)
+            //}
             // 删除按钮
-            if(!this.$testAuth('roleAuthManage.vue_delete')) {
-              data.splice(4, 1)
-            }
+            //if(!this.$testAuth('roleAuthManage.vue_delete')) {
+              //data.splice(4, 1)
+            //}
             return h("div", data)
           },
         },
@@ -465,61 +473,11 @@ export default {
     },
     getDataList() {
       this.loading = false;
-      // this.data = [
-      //   {
-      //     roleName: '系统管理员',
-      //     description: '系统管理员',
-      //     createTime: '',
-      //     creator: '',
-      //     permissions: [
-      //       {
-      //         id: "175877432572645376",
-      //         createBy: null,
-      //         createTime: "2019-08-19 22:06:29",
-      //         updateBy: null,
-      //         updateTime: "2019-08-19 22:06:29",
-      //         delFlag: 0,
-      //         roleId: "16457350655250432",
-      //         menuPid: "125909152017944576"
-      //       },
-      //       {
-      //         id: "175877432572645376",
-      //         createBy: null,
-      //         createTime: "2019-08-19 22:06:29",
-      //         updateBy: null,
-      //         updateTime: "2019-08-19 22:06:29",
-      //         delFlag: 0,
-      //         roleId: "16457350655250432",
-      //         menuPid: "5129710648430592"
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     roleName: '普通用户',
-      //     description: '普通用户',
-      //     createTime: '',
-      //     creator: '',
-      //     permissions: [
-      //       {
-      //         id: "175877432572645376",
-      //         createBy: null,
-      //         createTime: "2019-08-19 22:06:29",
-      //         updateBy: null,
-      //         updateTime: "2019-08-19 22:06:29",
-      //         delFlag: 0,
-      //         roleId: "16457350655250432",
-      //         menuPid: "125909152017944576"
-      //       }
-      //     ]
-      //   },
-      // ]
-      // this.total = 2
-      // this.loading = false;
       getAllRole({pageIndex: this.searchForm.pageNumber, pageSize: this.searchForm.pageSize, queryValue: this.searchForm.key}).then((res) => {
         this.loading = false;
-        if (res.data.code === '0') {
-          this.data = res.data.result.content;
-          this.total = res.data.result.totalElements;
+        if (res.data.retcode === '0000') {
+          this.data = res.data.data.content;
+          this.total = res.data.data.totalElements;
           if (this.data.length == 0 && this.searchForm.pageNumber > 1) {
             this.searchForm.pageNumber -= 1;
             this.getDataList();
@@ -533,71 +491,11 @@ export default {
     },
     getPermList() {
       this.treeLoading = true;
-      // let data = [
-      //   {
-      //     id:"125909152017944576",
-      //     createBy:"admin",
-      //     createTime:"2019-04-04 00:50:22",
-      //     updateBy:"admin",
-      //     updateTime:"2020-10-28 16:17:38",
-      //     delFlag:0,
-      //     name:"xboot",
-      //     showAlways:true,
-      //     level:0,
-      //     type:-1,
-      //     title:"sys",
-      //     path:"",
-      //     component:"",
-      //     icon:"md-home",
-      //     buttonType:"",
-      //     isMenu:true,
-      //     url:"",
-      //     description:"",
-      //     parentId:"0",
-      //     sortOrder:0.00,
-      //     status:0,
-
-      //     checked: false,
-
-      //     children:[
-      //       {
-      //         id:"5129710648430592",
-      //         createBy:"",
-      //         createTime:"2018-06-04 19:02:29",
-      //         updateBy:"",
-      //         updateTime:"2018-09-29 23:11:56",
-      //         delFlag:0,
-      //         name:"sys",
-      //         showAlways:true,
-      //         level:1,"type":0,
-      //         title:"user-manage",
-      //         path:"/sys",
-      //         component:"Main",
-      //         icon:"ios-settings",
-      //         buttonType:"",
-      //         isMenu:null,
-      //         url:"",
-      //         description:"",
-      //         parentId:"125909152017944576",
-      //         sortOrder:1.00,
-      //         status:0,
-
-      //         checked: false,
-
-      //         children:[
-      //         ]
-      //       }
-      //     ]
-      //   }
-      // ]
-      // this.deleteDisableNode(data)
-      // this.permData = data
-      // this.treeLoading = false;
       getMenuTree().then((res) => {
-        if (res.data.code === '0') {
-          this.initTree(res.data.result, 0)
-          this.deleteDisableNode(res.data.result);
-          this.permData = res.data.result[0].children;
+        if (res.data.retcode === '0000') {
+          this.initTree(res.data.data, 0)
+          this.deleteDisableNode(res.data.data);
+          this.permData = res.data.data[0].children;
           this.treeLoading = false;
         } else {
           this.$Message.warning("数据库操作错误：" + res.data.message)

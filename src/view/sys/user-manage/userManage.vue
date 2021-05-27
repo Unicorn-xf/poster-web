@@ -22,12 +22,14 @@
               placeholder="选择起始时间" style="width: 200px"></DatePicker>
           </FormItem>
           <FormItem style="margin-left: -35px" class="br">
-            <Button @click="handleSearch" type="primary" icon="ios-search" v-hasAuth="'userManage.vue_search'">搜索</Button>
+            <!-- v-hasAuth="'userManage.vue_search'" -->
+            <Button @click="handleSearch" type="primary" icon="ios-search" >搜索</Button>
           </FormItem>
         </Form>
       </Row>
       <Row class="operation">
-        <Button @click="add" type="primary" icon="md-add" v-hasAuth="'userManage.vue_add'" style="margin-right: 20px;">添加用户</Button>
+        <!-- v-hasAuth="'userManage.vue_add'" -->
+        <Button @click="add" type="primary" icon="md-add"  style="margin-right: 20px;">添加用户</Button>
         <Dropdown @on-click="handleDropdown">
           <Button>
             更多操作
