@@ -79,7 +79,7 @@
         <FormItem label="角色名称" prop="name">
           <Input
             v-model="roleForm.roleName"
-            placeholder="按照Spring Security约定建议以‘ROLE_’开头"
+            placeholder="请输入要创建的角色名称"
           />
         </FormItem>
         <FormItem label="备注" prop="description">
@@ -542,13 +542,14 @@ export default {
             this.submitLoading = true;
             addRole(this.roleForm).then((res) => {
               this.submitLoading = false;
-              if (res.data.code === '0') {
+              if (res.data.retcode === '0000') {
                 this.$Message.success("操作成功");
                 this.getDataList();
                 this.roleModalVisible = false;
                 this.roleForm = {
                   name: "",
                   description: "",
+                  roleName:""
                 }
               } else {
                 this.$Message.warning("数据库操作错误：" + res.data.message)
@@ -560,7 +561,7 @@ export default {
             this.submitLoading = true;
             modifyRoleById(this.roleForm).then((res) => {
               this.submitLoading = false;
-              if (res.data.code === '0') {
+              if (res.data.retcode === '0000') {
                 this.$Message.success("操作成功");
                 this.getDataList();
                 this.roleModalVisible = false;
@@ -614,7 +615,7 @@ export default {
         onOk: () => {
           delRoleById({ ids: v.id }).then((res) => {
             this.$Modal.remove();
-            if (res.data.code === '0') {
+            if (res.data.retcode === '0000') {
               this.clearSelectAll();
               this.$Message.success("删除成功");
               this.getDataList();
@@ -678,7 +679,7 @@ export default {
           ids = ids.substring(0, ids.length - 1);
           delRoleById({ ids: ids }).then((res) => {
             this.$Modal.remove();
-            if (res.data.code === '0') {
+            if (res.data.retcode === '0000') {
               this.$Message.success("删除成功");
               this.clearSelectAll();
               this.getDataList();
@@ -762,7 +763,7 @@ export default {
         menuIds: permIds,
       }).then((res) => {
         this.submitPermLoading = false;
-        if (res.data.code === '0') {
+        if (res.data.retcode === '0000') {
           this.$Message.success("操作成功");
           // 标记重新获取菜单数据
           this.$store.commit("setAdded", false);

@@ -1050,7 +1050,6 @@ export default {
             menu.parentMenu = menu.parentMenuName[0];
           }
         }
-        console.info("表单："+JSON.stringify(menu))
         this.form = menu;
         this.editTitle = menu.title;
       } else {

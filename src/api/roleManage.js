@@ -20,33 +20,41 @@ export const getMenuTree = (data) => {
 }
 
 export const modifyRoleMenu = (data) => {
+  data.method = 'modifyRoleMenu'
   return axios.request({
-    url: '/sysRole/modifyRoleMenu',
+    url: '/http/roleInfo',
     method: 'post',
     data: data
   })
 }
 
 export const addRole = (data) => {
+  let list = {}
+  list.method = 'addRole'
+  list.info = data
   return axios.request({
-    url: '/sysRole/addRole',
+    url: '/http/roleInfo',
     method: 'post',
-    data: data
+    data: list
   })
 }
 
 export const delRoleById = (data) => {
+  data.method = 'delRoleById'
   return axios.request({
-    url: '/sysRole/delRoleById',
+    url: '/http/roleInfo',
     method: 'post',
     data: data
   })
 }
 
 export const modifyRoleById = (data) => {
+  let list = {}
+  list.method = 'modifyRoleById'
+  list.info = data
   return axios.request({
-    url: '/sysRole/modifyRoleById',
+    url: '/http/roleInfo',
     method: 'post',
-    data: data
+    data: list
   })
 }
