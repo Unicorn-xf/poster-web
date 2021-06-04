@@ -351,9 +351,9 @@
             title: this.searchKey
           }).then((res) => {
             this.loading = false;
-            if (res.data.code === '0') {
+            if (res.data.retcode == "0000") {
               // 格式转换
-              let transed = JSON.parse(JSON.stringify(res.data.result).replace(/deptName/g, "title").replace(/parentName/g,
+              let transed = JSON.parse(JSON.stringify(res.data.data).replace(/deptName/g, "title").replace(/parentName/g,
                 "parentTitle").replace(/deptPid/g, "parentId").replace(/deptSort/g,"sortOrder"));
               transed.forEach(function(e) {
                 if (e.isParent == '1') {
@@ -445,7 +445,7 @@
             }
             let data = {
               id:this.form.id,
-              deptPid: this.form.parentId,
+              deptPid: this.form.parentId + "",
               deptSort: this.form.sortOrder,
               isEnable: this.form.status,
               deptName: this.form.title,
@@ -454,7 +454,7 @@
             this.submitLoading = true;
             editDepartment(data).then((res) => {
               this.submitLoading = false;
-              if (res.data.success) {
+              if (res.data.retcode === '0000') {
                 this.$Message.success("编辑成功");
                 this.init();
                 this.modalVisible = false;
@@ -468,16 +468,16 @@
           if (valid) {
             this.submitLoading = true;
             let data = {
-              deptPid: this.formAdd.parentId,
+              deptPid: this.formAdd.parentId.toString(),
               deptSort: this.formAdd.sortOrder,
-              isEnable: this.formAdd.status,
+              isEnable: this.formAdd.status.toString(),
               deptName: this.formAdd.title,
               remark: this.formAdd.title,
               creator: store.state.user.userId
             }
             addDepartment(data).then((res) => {
               this.submitLoading = false;
-              if (res.data.code === '0') {
+              if (res.data.retcode === '0000') {
                 this.$Message.success("添加成功");
                 this.init();
                 this.modalVisible = false;
@@ -551,7 +551,7 @@
               ids: ids
             }).then((res) => {
               this.$Modal.remove();
-              if (res.data.code === '0') {
+              if (res.data.retcode === '0000') {
                 this.$Message.success("删除成功");
                 this.selectList = [];
                 this.cancelEdit();
