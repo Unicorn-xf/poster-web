@@ -36,11 +36,15 @@
   <div class="search">
     <Card>
       <Row class="operation">
-        <Button v-hasAuth="'departmentManage.vue_add'" @click="add" type="primary" icon="md-add" v-show="showType == 'tree'">添加子部门</Button>
-        <Button v-hasAuth="'departmentManage.vue_add'" @click="addRoot" icon="md-add">添加一级部门</Button>
-        <Button v-hasAuth="'departmentManage.vue_delete'" @click="delAll" icon="md-trash">批量删除</Button>
+        <!--v-hasAuth="'departmentManage.vue_add'"-->
+        <Button  @click="add" type="primary" icon="md-add" v-show="showType == 'tree'">添加子部门</Button>
+        <!--v-hasAuth="'departmentManage.vue_add'"-->
+        <Button  @click="addRoot" icon="md-add">添加一级部门</Button>
+        <!--v-hasAuth="'departmentManage.vue_delete'"-->
+        <Button  @click="delAll" icon="md-trash">批量删除</Button>
         <Button @click="getParentList" icon="md-refresh">刷新</Button>
-        <Input v-hasAuth="'departmentManage.vue_search'" v-model="searchKey" suffix="ios-search" @on-change="search" placeholder="输入部门名搜索" clearable style="width: 250px"
+        <!--v-hasAuth="'departmentManage.vue_search'"-->
+        <Input  v-model="searchKey" suffix="ios-search" @on-change="search" placeholder="输入部门名搜索" clearable style="width: 250px"
           v-show="showType == 'list'" />
         <i-switch v-model="strict" size="large" v-show="showType == 'tree'" style="margin-left: 5px">
           <span slot="open">级联</span>
@@ -100,7 +104,8 @@
             </i-switch>
           </FormItem>
           <FormItem class="br">
-            <Button @click="submitEdit" :loading="submitLoading" type="primary" icon="ios-create-outline" v-hasAuth="'departmentManage.vue_edit'">修改并保存</Button>
+            <!--v-hasAuth="'departmentManage.vue_edit'"-->
+            <Button @click="submitEdit" :loading="submitLoading" type="primary" icon="ios-create-outline" >修改并保存</Button>
             <Button @click="handleReset">重置</Button>
           </FormItem>
         </Form>
@@ -202,8 +207,9 @@
             align: "center",
           },
           {
+            title: "序号",
             type: "index",
-            width: 60,
+            width: 75,
             align: "center",
           },
           {
@@ -278,8 +284,8 @@
         }).then((res) => {
           this.loading = false;
           res = res.data;
-          if (res.success) {
-            let needTrans = res.result
+          if (res.retcode == "0000") {
+            let needTrans = res.data
             let transed = this.transTree(needTrans)
             this.data = transed;
           }
@@ -292,8 +298,8 @@
         }).then((res) => {
           this.loadingEdit = false;
           res = res.data
-          if (res.success) {
-            let needTrans = res.result
+          if (res.retcode == "0000") {
+            let needTrans = res.data
             let transed = this.transTree(needTrans)
             // 头部加入一级
             let first = {
@@ -330,10 +336,9 @@
         loadDepartment({
           "parentId": item.id
         }).then((res) => {
-          console.log("+++++: " + JSON.stringify(res));
           res = res.data
-          if (res.success) {
-            let needTrans = res.result
+          if (res.retcode == "0000") {
+            let needTrans = res.data
             let transed = this.transTree(needTrans)
             callback(transed);
           }

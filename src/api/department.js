@@ -11,10 +11,13 @@ import axios from '@/libs/api.request'
 // }
 // 加载部门子级数据
 export const loadDepartment = (params) => {
+  let data = {}
+  data.method = "getByParentId"
+  data.info = params
   return axios.request({
-    url: 'sysDept/getByParentId',
+    url: '/http/deptInfo',
     method: 'post',
-    data: params
+    data: data
   })
 }
 // 添加部门
