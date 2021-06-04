@@ -278,7 +278,7 @@
       },
       getParentList() {
         this.loading = true;
-        console.log("请求一级部门");
+        //console.log("请求一级部门");
         loadDepartment({
           "parentId": "0"
         }).then((res) => {
@@ -332,7 +332,7 @@
         return transed
       },
       loadData(item, callback) {
-        console.log("item.id: ", item.id);
+        //console.log("item.id: ", item.id);
         loadDepartment({
           "parentId": item.id
         }).then((res) => {
@@ -374,7 +374,7 @@
         }
       },
       selectTree(v) {
-        console.log("v: " + JSON.stringify(v));
+        //console.log("v: " + JSON.stringify(v));
         if (v.length > 0) {
           // 转换null为""
           for (let attr in v[0]) {
