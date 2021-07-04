@@ -72,11 +72,11 @@
             <Avatar icon="person" size="large" />
           </FormItem> -->
           <FormItem label="用户名" prop="userName">
-            <Input v-model="userForm.userName" placeholder="请输入用户名" @on-change = "checkUserName"  />
-            <span v-if="userExit" class="tip">用户名已存在</span>
+            <Input v-model="userForm.userName" placeholder="请输入用户名"  />
           </FormItem>
           <FormItem label="电话号码" prop="phoneNum">
-            <Input v-model="userForm.phoneNum" placeholder="请输入用户名"/>
+            <Input v-model="userForm.phoneNum" placeholder="请输入电话号码" @input = "checkUserName"/>
+             <span v-if="userExit" class="tip">电话号码已存在</span>
           </FormItem>
           <FormItem label="密码" prop="passwd" v-if="modalType == 0">
             <Input v-model="userForm.passwd" type="password" placeholder="请输入密码" />
@@ -421,7 +421,7 @@
         }
         getUserInfos(list).then((res) => {
           if (res.data.retcode="0000") {
-            this.allUserList = res.data.data;
+            this.allUserList = res.data.data.context;
           }
         });
       },
@@ -437,12 +437,12 @@
         });
       },
       checkUserName(){
-       let name = this.userForm.userName
+       let phoneNum = this.userForm.phoneNum
        let list = this.allUserList
-       if(name != ""){
+       if(phoneNum != ""){
          if(this.modalType == 0){
            for(let i=0;i<list.length;i++){
-             if(list[i].userName === name){
+             if(list[i].phoneNum === phoneNum){
                this.userExit = true
                return;
              }else{
@@ -452,11 +452,11 @@
 
          }else{
            let editUserName = this.editUserName
-           if(name === editUserName){
+           if(phoneNum === editUserName){
              this.userExit = false;
            }else{
              for(let i=0;i<list.length;i++){
-               if(list[i].userName === name){
+               if(list[i].phoneNum === phoneNum){
                  this.userExit = true
                  return;
                }else{
@@ -521,7 +521,7 @@
         let userInfo = JSON.parse(str);
         let list = userInfo.deptId.replace(/\[|]/g, '').split(',')
         userInfo.deptId = list;
-        this.editUserName = userInfo.userName;
+        this.editUserName = userInfo.phoneNum;
         this.userForm = userInfo;
         this.userModalVisible = true;
       },
