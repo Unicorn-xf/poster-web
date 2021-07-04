@@ -11,9 +11,9 @@
               <Option v-for="(item, i) in dictState" :key="i" :value="item.value">{{ item.title }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="登录IP" prop="lastLoginIp">
+         <!-- <FormItem label="登录IP" prop="lastLoginIp">
             <Input type="text" v-model="searchForm.lastLoginIp" clearable placeholder="请输入上次登录IP" style="width: 200px" />
-          </FormItem>
+          </FormItem> -->
           <FormItem label="创建者" prop="creator">
             <Input type="text" v-model="searchForm.creator" clearable placeholder="请输入创建者" style="width: 200px" />
           </FormItem>
@@ -21,14 +21,28 @@
             <DatePicker v-model="selectDate" type="daterange" format="yyyy-MM-dd" clearable @on-change="selectDateRange"
               placeholder="选择起始时间" style="width: 200px"></DatePicker>
           </FormItem>
-          <FormItem style="margin-left: -35px" class="br">
+          <FormItem style="margin-left: -50px" class="br">
             <!-- v-hasAuth="'userManage.vue_search'" -->
-            <Button @click="handleSearch" type="primary" icon="ios-search" >搜索</Button>
+            <Button @click="handleSearch" type="primary" icon="ios-search" style="margin-right: 20px;">搜索</Button>
+            <Button @click="add" type="primary" icon="md-add"  style="margin-right: 25px;">添加用户</Button>
+            <Dropdown @on-click="handleDropdown">
+              <Button>
+                更多操作
+                <Icon type="md-arrow-dropdown" />
+              </Button>
+              <DropdownMenu slot="list">
+                <DropdownItem name="refresh">刷新</DropdownItem>
+                <!-- <DropdownItem name="reset">重置用户密码</DropdownItem> -->
+                <!-- <DropdownItem name="exportData">导出所选数据</DropdownItem>
+              <DropdownItem name="exportAll">导出全部数据</DropdownItem>
+              <DropdownItem name="importData">导入数据(付费)</DropdownItem> -->
+              </DropdownMenu>
+            </Dropdown>
           </FormItem>
         </Form>
       </Row>
-      <Row class="operation">
-        <!-- v-hasAuth="'userManage.vue_add'" -->
+      <!-- <Row class="operation">
+        v-hasAuth="'userManage.vue_add'"
         <Button @click="add" type="primary" icon="md-add"  style="margin-right: 20px;">添加用户</Button>
         <Dropdown @on-click="handleDropdown">
           <Button>
@@ -37,13 +51,13 @@
           </Button>
           <DropdownMenu slot="list">
             <DropdownItem name="refresh">刷新</DropdownItem>
-            <!-- <DropdownItem name="reset">重置用户密码</DropdownItem> -->
-            <!-- <DropdownItem name="exportData">导出所选数据</DropdownItem>
+            <DropdownItem name="reset">重置用户密码</DropdownItem>
+             <DropdownItem name="exportData">导出所选数据</DropdownItem>
           <DropdownItem name="exportAll">导出全部数据</DropdownItem>
-          <DropdownItem name="importData">导入数据(付费)</DropdownItem> -->
+          <DropdownItem name="importData">导入数据(付费)</DropdownItem>
           </DropdownMenu>
         </Dropdown>
-      </Row>
+      </Row> -->
       <Table border stripe :columns="columns" :data="data" style="margin-top: 20px;text-align: center;"></Table>
       <!-- <Page :total="total" show-elevator style='text-align: center;margin-top: 20px;' @on-change="changePage"></Page> -->
       <Row type="flex" justify="end" class="pages">
@@ -61,8 +75,11 @@
             <Input v-model="userForm.userName" placeholder="请输入用户名" @on-change = "checkUserName"  />
             <span v-if="userExit" class="tip">用户名已存在</span>
           </FormItem>
-          <FormItem label="密码" prop="pwd" v-if="modalType == 0">
-            <Input v-model="userForm.pwd" type="password" placeholder="请输入密码" />
+          <FormItem label="电话号码" prop="phoneNum">
+            <Input v-model="userForm.phoneNum" placeholder="请输入用户名"/>
+          </FormItem>
+          <FormItem label="密码" prop="passwd" v-if="modalType == 0">
+            <Input v-model="userForm.passwd" type="password" placeholder="请输入密码" />
           </FormItem>
           <FormItem label="状态" prop="state">
             <Select v-model="userForm.state" placeholder="请选择" clearable style="width: 200px">
@@ -160,17 +177,6 @@
             },
           },
           {
-            title: '上次登录IP',
-            align: "center",
-            width: 110,
-            key: 'lastLoginIp'
-          },
-          {
-            title: '上次登录时间',
-            align: "center",
-            key: 'lastLoginDate'
-          },
-          {
             title: '创建者',
             align: "center",
             width: 110,
@@ -265,21 +271,21 @@
                 ),
               ]
               // 编辑按钮
-              if(!this.$testAuth('userManage.vue_edit')) {
-                data.splice(0, 2)
-              }
+              // if(!this.$testAuth('userManage.vue_edit')) {
+              //   data.splice(0, 2)
+              // }
               // 启用/禁用按钮
-              if(!this.$testAuth('userManage.vue_enable')) {
-                data.splice(2, 2)
-              }
+              // if(!this.$testAuth('userManage.vue_enable')) {
+              //   data.splice(2, 2)
+              // }
               // 重置按钮
-              if(!this.$testAuth('userManage.vue_setDefault')) {
-                data.splice(6, 1)
-              }
+              // if(!this.$testAuth('userManage.vue_setDefault')) {
+              //   data.splice(6, 1)
+              // }
               // 删除按钮
-              if(!this.$testAuth('userManage.vue_delete')) {
-                data.splice(4, 2)
-              }
+              // if(!this.$testAuth('userManage.vue_delete')) {
+              //   data.splice(4, 2)
+              // }
 
               return h("div", data)
             },
@@ -289,7 +295,6 @@
         searchForm: {
           userName: "",
           state: "",
-          lastLoginIp: "",
           creator: "",
           startDate: "",
           endDate: "",
@@ -314,7 +319,8 @@
           state: "",
           role: "",
           deptId:[],
-          pwd: "",
+          passwd: "",
+          phoneNum:"",
           creator: "",
         },
         userFormValidate: {
@@ -323,7 +329,7 @@
             message: "用户名不能为空",
             trigger: "change"
           }, ],
-          pwd: [{
+          passwd: [{
             required: true,
             message: "请输入密码",
             trigger: "change"
@@ -336,6 +342,11 @@
           role: [{
             required: true,
             message: "请选择角色",
+            trigger: "change"
+          }, ],
+          phoneNum: [{
+            required: true,
+            message: "请输入电话号码",
             trigger: "change"
           }, ]
         },
@@ -383,10 +394,10 @@
         this.loading = true;
         getUserInfos(this.searchForm).then((res) => {
           this.loading = false;
-          if (res.data.success) {
-            this.data = res.data.result;
-            if (res.data.result.length > 0) {
-              this.total = res.data.result[0].num;
+          if (res.data.retcode == "0000") {
+            this.data = res.data.data.context;
+            if (res.data.data.context.length > 0) {
+              this.total = res.data.data.num;
             } else {
               this.total = 0
             }
@@ -402,7 +413,6 @@
         let list = {
           userName: "",
           state: "",
-          lastLoginIp: "",
           creator: "",
           startDate: "",
           endDate: "",
@@ -410,8 +420,8 @@
           pageSize: 9999,
         }
         getUserInfos(list).then((res) => {
-          if (res.data.success) {
-            this.allUserList = res.data.result;
+          if (res.data.retcode="0000") {
+            this.allUserList = res.data.data;
           }
         });
       },
@@ -419,8 +429,8 @@
       getDeptList() {
         let lists = {}
         getDeptList(lists).then((res) => {
-          if (res.data.success) {
-            let list = res.data.result;
+          if (res.data.retcode ==="0000") {
+            let list = res.data.data;
             let data = []
             this.deptList = list
           }
@@ -461,10 +471,11 @@
       getRoleList() {
         getRoleList({
           pageSize: 9999,
-          pageIndex: 1
+          pageIndex: 1,
+          queryValue:""
         }).then((res) => {
-          if (res.data.success) {
-            let list = res.data.result.content;
+          if (res.data.retcode ==="0000") {
+            let list = res.data.data.content;
             let data = []
             for (let i = 0; i < list.length; i++) {
               data.push({
@@ -486,8 +497,9 @@
           avatar: "https://file.iviewui.com/dist/a0e88e83800f138b94d2414621bd9704.png",
           state: "",
           role: "",
+          phoneNum:"",
           deptId:[],
-          pwd: "",
+          passwd: "",
           creator: "",
         }
         this.$refs.userForm.resetFields();
@@ -521,11 +533,11 @@
           loading: true,
           onOk: () => {
             enableUser({
-              id: v.id,
+              id: v._id,
               type: 0
             }).then((res) => {
               this.$Modal.remove();
-              if (res.data.success) {
+              if (res.data.retcode="0000") {
                 this.$Message.success("操作成功");
                 this.getDataList();
               }
@@ -541,11 +553,11 @@
           loading: true,
           onOk: () => {
             disableUser({
-              id: v.id,
+              id: v._id,
               type: 1
             }).then((res) => {
               this.$Modal.remove();
-              if (res.data.success) {
+              if (res.data.retcode="0000") {
                 this.$Message.success("操作成功");
                 this.getDataList();
               }
@@ -561,10 +573,10 @@
           loading: true,
           onOk: () => {
             deleteUser({
-              id: v.id
+              id: v._id
             }).then((res) => {
               this.$Modal.remove();
-              if (res.data.success) {
+              if (res.data.retcode="0000") {
                 this.$Message.success("删除成功");
                 this.getDataList();
               }
@@ -578,13 +590,13 @@
           content: "您确认要重置用户 " + v.userName + "的密码 ?",
           loading: true,
           onOk: () => {
-            let password = md5('123456');
+            let password = '123456';
             resetUser({
-              id: v.id,
+              id: v._id,
               password: password
             }).then((res) => {
               this.$Modal.remove();
-              if (res.data.success) {
+              if (res.data.retcode="0000") {
                 this.$Message.success("重置密码成功");
                 this.getDataList();
               }
@@ -619,12 +631,12 @@
               }
               list += "]"
               this.userForm.creator = store.state.user.userName;
-              this.userForm.pwd = md5(this.userForm.pwd);
+              this.userForm.passwd = this.userForm.passwd;
               this.userForm.deptId = list
               this.submitLoading = true;
               addUser(this.userForm).then((res) => {
                 this.submitLoading = false;
-                if (res.data.success) {
+                if (res.data.retcode="0000") {
                   this.$Message.success("操作成功");
                   this.getDataList();
                   this.userModalVisible = false;
@@ -644,8 +656,9 @@
               this.submitLoading = true;
               this.userForm.deptId = list
               editUser(this.userForm).then((res) => {
+                console.info("修改数据："+JSON.stringify(res))
                 this.submitLoading = false;
-                if (res.data.success) {
+                if (res.data.retcode=="0000") {
                   this.$Message.success("操作成功");
                   this.getDataList();
                   this.userModalVisible = false;
