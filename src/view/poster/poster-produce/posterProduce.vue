@@ -38,6 +38,7 @@
 </template>
 <script>
 import excel from '@/libs/excel'
+import xlsx from 'xlsx'
 export default {
   name: 'upload-excel',
   data () {
