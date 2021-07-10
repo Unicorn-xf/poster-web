@@ -32,34 +32,26 @@
         </transition>
       </Row>
     </Card>
-    <!-- 生成推广海报的按钮 -->
-    <div class="bill-btn" width="330">
-      <Button class="bill" style="height:40px" @click="modal1=true;">一键生成推广海报</Button>
-
-    </div>
 
     <!-- 推广海报的模态框 -->
-    <Modal v-model="modal1" width="330" @on-ok="clickGeneratePicture()" @on-cancel="cancel" :closable="false">
-        <Carousel v-model="value1">
-          <CarouselItem>
-            <div class="container" ref="imageDomFirst">
-              <img src="../../../assets/images/beijing22.jpg" width="100%" height="100%" alt="">
-            </div>
-          </CarouselItem>
-          <CarouselItem>
-            <div class="container" ref="imageDomSecond">
-              <img src="../../../assets/images/beijing22.jpg" width="100%" height="100%" alt="">
-            </div>
-          </CarouselItem>
-          <CarouselItem>
-            <div class="container" ref="imageDomThird">
-              <img src="../../../assets/images/beijing22.jpg" width="100%" height="100%" alt="">
-            </div>
-          </CarouselItem>
+    <Card>
+      <div id="picbox">
+        <div id="pic">
+          <div id="p1">
+            <img src="../../../assets/images/poster.png" />
+            <img src="../../../assets/images/poster.png" />
+            <img src="../../../assets/images/poster.png" />
+          </div>
+          <div id="p2">
+            <img src="../../../assets/images/poster.png" />
+            <img src="../../../assets/images/poster.png" />
+            <img src="../../../assets/images/poster.png" />
+          </div>
+        </div>
+      </div>
+    </Card>
 
-        </Carousel>
 
-    </Modal>
     <Row class="margin-top-10">
       <Table :columns="tableTitle" :data="tableData" :loading="tableLoading"></Table>
     </Row>
@@ -88,8 +80,9 @@
           changpinName: "",
           baofei: ""
         }],
-        value1:0,
-        modal1:false
+        value1: 0,
+        modal1: false,
+        value: 0
       }
     },
     methods: {
@@ -298,7 +291,7 @@
           });
         }
       },
-      cancel(){
+      cancel() {
 
       }
 
@@ -311,3 +304,22 @@
     }
   }
 </script>
+<style type="text/css">
+	#picbox{
+		width: 400px;
+		overflow: hidden;
+	}
+	#pic{
+		width:2424px;
+		font-size: 0;
+		
+	}
+	#pic>div{
+		display: inline-block;
+		
+	}
+	
+	#pic img{
+		width: 400px;
+	}
+</style>

@@ -656,7 +656,6 @@
               this.submitLoading = true;
               this.userForm.deptId = list
               editUser(this.userForm).then((res) => {
-                console.info("修改数据："+JSON.stringify(res))
                 this.submitLoading = false;
                 if (res.data.retcode=="0000") {
                   this.$Message.success("操作成功");
